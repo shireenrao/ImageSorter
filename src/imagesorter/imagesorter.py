@@ -26,6 +26,7 @@ Usage:
     -s --source            Directory to process. If not set will process current directory
     -t --target            Expression to remove from file name
 
+    A log file is created in the same location as the one would run the script.
 '''
 import os, sys, errno
 import shutil
