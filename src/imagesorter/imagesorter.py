@@ -4,17 +4,18 @@ Created on Feb 7, 2013
 
 @author: shireenrao
 NAME
-    imagesorter - This is a utility to sort images into directories based on
-              year/month and date taken from the exif data of the image
+    imagesorter - This is a utility to sort images and videos into directories
+    based on year/month and date taken from the exif data of the image
 
 SYNOPSIS
-    imagesorter [hvs:t:]
+    imagesorter [hvs:t:f:]
 
 Usage:
-    % imagesorter -s /path/to/source -t /path/to/target
+    % imagesorter -s /path/to/source -t /path/to/target [-f format]
 
     where /path/to/source is where all the images are stored
     and /path/to/target is where images will be sorted
+    and optional argument for format for target directory structure
 
     The source tag is optional. If not provided, it will take the
     current directory.
@@ -23,8 +24,25 @@ Usage:
 
     -h --help              Prints this
     -v --version           Prints version
-    -s --source            Directory to process. If not set will process current directory
+    -s --source            Directory to process. If not set will process
+                           current directory
     -t --target            Expression to remove from file name
+    -f --format            Optional format for target directory structure.
+                           Default structure created under target directory
+                           is YEAR/MONTH/DATE
+                           e.g. 2013/January/2013_01_13
+                           The format is supplied as a pipe delimited string
+                           like "y1|d1". This will create a directory
+                           structure of the format "2013/2013_01_13" under your
+                           target directory.
+
+                           Here are the possible format types -
+                           y1 - Year type 1 e.g. 2013
+                           y2 - Year type 2 e.g. 13
+                           m1 - Month type 1 e.g. January
+                           m2 - Month type 2 e.g. Jan
+                           m3 - Month type 3 e.g. 01
+                           d1 - Day type 1 e.g. 13 (will have leading 0 if < 10)
 
     A log file is created in the same location as the one would run the script.
 '''
