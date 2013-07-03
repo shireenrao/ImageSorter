@@ -29,22 +29,29 @@ Usage:
     -t --target            Expression to remove from file name
     -f --format            Optional format for target directory structure.
                            Default structure created under target directory
-                           is YEAR/MONTH/DATE
+                           is yyyy/mmmm/yyyy_mm_dd
                            e.g. 2013/January/2013_01_13
-                           The format is supplied as a pipe delimited string
-                           like "y1|d1". This will create a directory
-                           structure of the format "2013/2013_01_13" under your
-                           target directory.
+                           The format is supplied as "yyyy/yyyy_mm_dd".
+                           This will create a directory structure of the format
+                           "2013/2013_01_13" under your target directory.
+                           Where 2013 is a sub-directory under the target
+                           directory and 2013_01_13 is a sub-directory under
+                           2013
+
 
                            Here are the possible format types -
-                           y1 - Year type 1 e.g. 2013
-                           y2 - Year type 2 e.g. 13
-                           m1 - Month type 1 e.g. January
-                           m2 - Month type 2 e.g. Jan
-                           m3 - Month type 3 e.g. 01
-                           d1 - Day type 1 e.g. 13 (will have leading 0 if < 10)
+                           d    day as a number without leading zero (1-31)
+                           dd   day as a number with leading zero (01-31)
+                           ddd  day as an abreviation (Sun-Sat)
+                           dddd day as a full name (Sunday-Saturday)
+                           m    month as a number without leading zero (1-12)
+                           mm   month as a number with leading zero (01-12)
+                           mmm  month as an abreviation (Jan-Dec)
+                           mmmm month as a full name (January-December)
+                           yy   year as a two-digit number (00-99)
+                           yyyy year as a four digit number
 
-    A log file is created in the same location as the one would run the script.
+    A log file is created in the same location where you would run the script.
 '''
 import sys
 import EXIF
