@@ -90,6 +90,7 @@ def usage():
 
 
 def get_hachoir_create_date(fname):
+    """Get media create date using hachoir library"""
     global log
     retval = None
     filename, realname = unicodeFilename(fname), fname
@@ -211,10 +212,68 @@ def has_thm_file(filename):
         retval = (True, f_name+'.THM', thm_file1)
     return retval
 
+def createdirpath(format, tstamp, target=None):
+    """Return target directory location based on format and date"""
+    format = format.replace('yyyy','%Y')
+    format = format.replace('yy','%y')
+    format = format.replace('mmmm','%B')
+    format = format.replace('mmm','%b')
+    format = format.replace('mm','%m')
+    # temp replace any %m to place holder  %1
+    format = format.replace('%m','%1')
+    # change m to place holder %2 which will be replaced with %m
+    # and lstrip on 0 right before we produce the output
+    format = format.replace('m','%2')
+    # change back place holder %1 to %m
+    format = format.replace('%1','%m')
+    format = format.replace('dddd','%A')
+    format = format.replace('ddd','%a')
+    format = format.replace('dd','%d')
+    # temp replace any %d to place holder %1
+    format = format.replace('%d', '%1')
+    # change d to placeholder %3 to be later replaced with lstrip %d
+    format = format.replace('d','%3')
+    # revert place holder back to %d
+    format = format.replace('%1','%d')
+
+    # begin special cases for singe d and singe m
+    # replace %2 with real month without leading 0
+    month_no_lead_zero = tstamp.strftime('%m').lstrip('0')
+    format = format.replace('%2',month_no_lead_zero)
+    # replace %3 with real day without leading 0
+    day_no_leading_zero = tstamp.strftime('%d').lstrip('0')
+    format = format.replace('%3',day_no_leading_zero)
+    # end special cases
+
+    has_folder = None
+    formatted_str = tstamp.strftime(format)
+    if formatted_str.find("/") > 0:
+        tokens = formatted_str.split("/")
+        has_folder = True
+    elif formatted_str.find("\\") > 0:
+        tokens = formatted_str.split("\\")
+        has_folder = True
+    else:
+        tokens = formatted_str
+
+    if has_folder:
+        if target:
+            destpath = os.path.join(target, *tokens)
+        else:
+            destpath = os.path.join(*tokens)
+    else:
+        if target:
+            destpath = os.path.join(target, tokens)
+        else:
+            destpath = os.path.join(tokens)
+
+    return destpath
+
 
 def main(argv):
     global log
     formats = ('jpg', 'avi', 'cr2', 'mov', 'mp4')
+    default_format = 'yyyy/mmmm/yyyy_mm_dd'
     log = logging.getLogger()
     ch = logging.StreamHandler()
 
@@ -238,7 +297,10 @@ def main(argv):
         log.setLevel(logging.INFO)
 
     try:
-        opts, args = getopt.getopt(argv, "hvs:t:", ["help", "version", "source=", "target="])
+        opts, args = getopt.getopt(argv,
+                                   "hvs:t:f:",
+                                   ["help", "version", "source=",
+                                    "target=", "format="])
     except getopt.GetoptError, err:
         # print help information and exit:
         print str(err) # will print something like "option -a not recognized"
@@ -252,6 +314,7 @@ def main(argv):
 
     _source = ""
     _target = ""
+    _dir_format = ""
 
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -265,8 +328,13 @@ def main(argv):
             _source = a
         elif o in ("-t", "--target"):
             _target = a
+        elif o in ("-f", "--format"):
+            _dir_format = a
         else:
             assert False, "unhandled option"
+
+    if not _dir_format:
+        _dir_format = default_format
 
     if not _source:
         _source = os.getcwd()
@@ -340,6 +408,7 @@ def main(argv):
                 create_date = get_hachoir_create_date(file)
 
         if create_date:
+            """
             year_str = str(create_date.year)
             month = create_date.month
             month_name = calendar.month_name[month]
@@ -355,6 +424,8 @@ def main(argv):
 
             folder_name = year_str + "_" + month_str + "_" + day_str
             destpath = os.path.join(_target, year_str, month_name, folder_name)
+            """
+            destpath = createdirpath(_dir_format, create_date, _target)
             try:
                 os.makedirs(destpath)
             except OSError as exc:
