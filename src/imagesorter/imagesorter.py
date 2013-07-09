@@ -385,7 +385,7 @@ def main(argv):
     for file in fileList:
         processCount = processCount + 1
         filename = os.path.basename(file)
-        orig_path = os.path.dirname(file)
+        orig_path = os.path.abspath(file)
         has_thm = False
         is_video_file = False
         if filename.lower().endswith('avi'):
