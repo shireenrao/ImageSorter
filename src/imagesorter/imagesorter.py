@@ -310,7 +310,7 @@ def main(argv):
     if not opts:
         version()
         usage()
-        exit()
+        sys.exit(1)
 
     _source = ""
     _target = ""
