@@ -37,11 +37,11 @@ Usage:
                            Here are the possible format types -
                            d    day as a number without leading zero (1-31)
                            dd   day as a number with leading zero (01-31)
-                           ddd  day as an abreviation (Sun-Sat)
+                           ddd  day as an abbreviation (Sun-Sat)
                            dddd day as a full name (Sunday-Saturday)
                            m    month as a number without leading zero (1-12)
                            mm   month as a number with leading zero (01-12)
-                           mmm  month as an abreviation (Jan-Dec)
+                           mmm  month as an abbreviation (Jan-Dec)
                            mmmm month as a full name (January-December)
                            yy   year as a two-digit number (00-99)
                            yyyy year as a four digit number
